@@ -33,6 +33,14 @@ on:
         options:
           - 'true'
           - 'false'
+      KERNEL_REPO:
+        description: 'Link repo kernel'
+        required: true
+        default: 'https://github.com/marble-indonesia/kernel_xiaomi_sm8450'
+      KERNEL_BRANCH:
+        description: 'Branch kernel'
+        required: true
+        default: 'update-kernel'
       zram:
         description: '是否开启lz4等zram压缩算法'
         required: true
@@ -121,18 +129,7 @@ jobs:
         run: |
           mkdir -p kernel_workspace
           cd kernel_workspace
-          echo "正在克隆源码仓库..."
-          if [[ "${{ github.event.inputs.kernel }}" == "esk" ]]; then
-            aria2c -s16 -x16 -k1M https://github.com/ESK-Project/android12-5.10-gki/archive/refs/heads/main.zip -o common.zip && 
-            unzip -q common.zip && 
-            mv "android12-5.10-gki-main" common &&
-            rm -rf common.zip &
-          elif [[ "${{ github.event.inputs.kernel }}" == "ztc" ]]; then
-            aria2c -s16 -x16 -k1M https://github.com/ztc1997/android_gki_kernel_5.10_common/archive/refs/heads/android12-5.10-2025-06.zip -o common.zip && 
-            unzip -q common.zip && 
-            mv "android_gki_kernel_5.10_common-android12-5.10-2025-06" common &&
-            rm -rf common.zip &
-          fi
+          git clone --depth=1 ${{ github.event.inputs.KERNEL_REPO }} -b ${{ github.event.inputs.KERNEL_BRANCH }} kernel
           
           echo "正在克隆llvm-Clang20工具链..." &&
           mkdir -p clang20 &&
