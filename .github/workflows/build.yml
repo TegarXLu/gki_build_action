@@ -33,14 +33,6 @@ on:
         options:
           - 'true'
           - 'false'
-      KERNEL_REPO:
-        description: 'Link repo kernel'
-        required: true
-        default: 'https://github.com/marble-indonesia/kernel_xiaomi_sm8450'
-      KERNEL_BRANCH:
-        description: 'Branch kernel'
-        required: true
-        default: 'update-kernel'
       zram:
         description: '是否开启lz4等zram压缩算法'
         required: true
@@ -129,7 +121,7 @@ jobs:
         run: |
           mkdir -p kernel_workspace
           cd kernel_workspace
-          git clone --depth=1 ${{ github.event.inputs.KERNEL_REPO }} -b ${{ github.event.inputs.KERNEL_BRANCH }} kernel
+          git clone --depth=1 https://github.com/marble-indonesia/kernel_xiaomi_sm8450 -b update-kernel
           
           echo "正在克隆llvm-Clang20工具链..." &&
           mkdir -p clang20 &&
